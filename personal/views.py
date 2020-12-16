@@ -1,0 +1,9 @@
+from django.shortcuts import render
+
+from django.shortcuts import render
+
+
+def home_screen_view(request, *args, **kwargs):
+    
+    return render(request, 'personal/home.html')
+
