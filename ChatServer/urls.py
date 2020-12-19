@@ -8,9 +8,15 @@ from personal.views import (
 )
 
 
+from account.views import(
+    register_view,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_screen_view, name='home'),
+
+    path('register/', register_view, name='register')
 ]
 
 
