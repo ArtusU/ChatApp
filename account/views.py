@@ -1,11 +1,23 @@
 from django.conf import Settings, settings
-from account.models import Account
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
+from django.core import files
+from django.core.files.storage import default_storage
+from django.core.files.storage import FileSystemStorage
+import os
+#import cv2
+import json
+import base64
+import requests
+
+
 
 from account.forms import RegistrationForm, AccountAuthenticationForm, AccountUpdateForm
+from account.models import Account
 
+
+TEMP_PROFILE_IMAGE_NAME = "temp_profile_image.png"
 
 def register_view(request, *args, **kwargs):
     user = request.user
@@ -129,6 +141,7 @@ def edit_account_view(request, *arg, **kwargs):
     if request.POST:
         form = AccountUpdateForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
+            account.profile_image.delete()
             form.save()
             return redirect('account:view', user_id=account.pk)
         else:
