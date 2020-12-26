@@ -1,3 +1,40 @@
 from django.shortcuts import render
+from django.http import HttpResponse
+import json
 
-# Create your views here.
+from account.models import Account
+from friend.models import FriendRequest
+
+def send_friend_request(request, *args, **kwargs):
+    user = request.user
+    payload = {}
+    if request.method == "POST" and user.is_authenticated:
+        user_id = request.POST.get("receiver_user_id")
+        if user_id:
+            receiver = Account.objects.get(pk=user_id)
+            try:
+                # Get any friend request (active or not-active)
+                friend_request = FriendRequest.objects.filter(sender=user, receiver=receiver)
+                try:
+                    for request in friend_request:
+                        if request.is_active: 
+                            raise Exception("You already sent them a friend request.")
+                    # non are active, create new friend request
+                    friend_request = FriendRequest(sender=user, receiver=receiver)
+                    friend_request.save()
+                    payload['response'] = "Friend request sent."
+                except Exception as e:
+                    payload['response'] = str(e)
+            except FriendRequest.DoesNotExist:
+                # there are not friend request so create one.
+                friend_request = FriendRequest(sender=user, receiver=receiver)
+                friend_request.save()
+                payload['response'] = "Friend request sent."
+
+            if payload['response'] == None:
+                payload['response'] = "Something went wrong."
+        else:
+            payload['response'] = "Unable to send friend request."
+    else:
+        payload['response'] = "You must be authenticated to send friend request."
+    return HttpResponse(json.dumps(payload), content_type="application/json")
