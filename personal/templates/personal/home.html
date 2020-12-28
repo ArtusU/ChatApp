@@ -1,24 +1,89 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 
-
 <style type="text/css">
-    .my-grid{
-        border: 1px solid black;
-    }
-    .my-grid-item{
-        border: 1px solid black;
-    }
-    </style>
+	.image-container{
+		max-width: 250px;
+		height: auto;
+	}
+	.field-heading{
+		color: var(--secondary-text-color);
+	}
+	.icon-container:hover {
+		opacity: 0.3;
+		cursor: pointer;
+	}
+	.friends-icon{
+		color: #4287f5;
+		font-size: 40px;
+	}
+	.person-add-icon{
+		color: #4287f5;
+		font-size: 40px;
+	}
+	.friend-text{
+		font-weight: 500;
+		color: black;
+	}
+	.friends-btn{
+		background-color: #cccccc;
+		border-color: #cccccc;
+		color: #000;
+		font-weight: 500;
+	}
+	.friends-btn:hover {
+		background-color: #bfbfbf;
+		border-color: #bfbfbf;
+	}
+	.dropdown-toggle::after { 
+		content: none; 
+	}
+	.card{
+		border-radius: 12px;
+	}
+	.material-icons{
+		font-size: 30px;
+	}
+	.material-icons:hover{
+		cursor: pointer;
+	}
+	.confirm-friend-request{
+		color: green;
+	}
+	.confirm-friend-request:hover {
+		opacity: 0.3;
+	}
+	.decline-friend-request:hover {
+		opacity: 0.3;
+	}
+	.decline-friend-request{
+		color: red;
+	}
+	.message-btn-text{
+		font-weight: 500;
+	}
+</style>
 
-<div class="container">
-    <div class="my-grid d-flex flex-row">
-        <p class="my-grid-item m-auto">Item</p>
-        <p class="my-grid-item m-auto">Item</p>
-        <p class="my-grid-item m-auto">Item</p>
-        <p class="my-grid-item m-auto"><></p>
-    </div>
+<div class="container-fluid">
+	<div class="d-flex flex-row justify-content-center flex-wrap align-items-start">
+		<div class="card profile-card m-8">
+            <div class="card-body">
+                <div class="d-flex flex-column justify-content-center p-4">
+                    <div class="py-1 text-center">
+                        <img class="d-block mx-auto mb-2" src="{% static '/icons/come.png' %}" alt="" width="250" height="250">
+                        <h2>Social Network</h2>
+                        <h2>Chat App</h2>
+                        <p class="lead">Demo Version 1.0</p>                
+                        <img class="d-block mx-auto mb-2" src="{% static '/icons/logoArtusU.png' %}" alt="" width="150" height="150">
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
 </div>
 
 {% endblock content %}
+
+

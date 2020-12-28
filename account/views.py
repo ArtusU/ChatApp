@@ -156,18 +156,25 @@ def account_view(request, *args, **kwargs):
 
 
 def account_search_view(request, *args, **kwargs):
-    context = {}
-
-    if request.method == "GET":
-        search_query = request.GET.get("q")
-        if len(search_query) > 0:
-            search_results = Account.objects.filter(email__icontains=search_query).filter(username__icontains=search_query).distinct()
-            accounts = []
-            for account in search_results:
-                accounts.append((account, False))
-            context['accounts'] = accounts
-
-    return render(request, 'account/search_results.html', context)
+	context = {}
+	if request.method == "GET":
+		search_query = request.GET.get("q")
+		if len(search_query) > 0:
+			search_results = Account.objects.filter(email__icontains=search_query).filter(username__icontains=search_query).distinct()
+			user = request.user
+			accounts = [] # [(account1, True), (account2, False), ...]
+			if user.is_authenticated:
+				# get the authenticated users friend list
+				auth_user_friend_list = FriendList.objects.get(user=user)
+				for account in search_results:
+					accounts.append((account, auth_user_friend_list.is_mutual_friend(account)))
+				context['accounts'] = accounts
+			else:
+				for account in search_results:
+					accounts.append((account, False))
+				context['accounts'] = accounts
+				
+	return render(request, "account/search_results.html", context)
 
 
 def edit_account_view(request, *args, **kwargs):
